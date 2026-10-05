@@ -1,6 +1,12 @@
 from test_data import *
+from policy import POLICY
 
-def json_search(key, input_object): 
+def json_search(key, input_object, role="viewer"):
+    if role not in {"admin", "operator", "viewer"}:
+        raise ValueError("invalid role")
+    if role not in POLICY.get(key, []):
+        return []
+
     ret_val = []
     if isinstance(input_object, dict): # Iterate dictionary
         for k, v in input_object.items():
